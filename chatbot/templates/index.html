@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Phi-3 Chatbot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/static/script.js" defer></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-light: #f0f2f5;
+      --bg-dark: #1e1e1e;
+      --card-light: #ffffff;
+      --card-dark: #2a2a2a;
+      --text-light: #111;
+      --text-dark: #eee;
+      --user-msg: #c9d8ff;
+      --bot-msg: #e4d8ff;
+      --primary: #7f5af0;
+      --primary-hover: #6844d9;
+      --hover-purple: #f3efff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-light);
+      color: var(--text-light);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body.dark {
+      background: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    #chat-container {
+      background-color: var(--card-light);
+      width: 95%;
+      max-width: 720px;
+      height: 90vh;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+
+    body.dark #chat-container {
+      background-color: var(--card-dark);
+    }
+
+    #header {
+      padding: 18px;
+      background: linear-gradient(45deg, var(--primary), var(--primary-hover));
+      color: white;
+      font-size: 1.6rem;
+      text-align: center;
+      font-weight: bold;
+      position: relative;
+    }
+
+    #toggle-theme {
+      position: absolute;
+      right: 16px;
+      top: 16px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      color: white;
+      transition: transform 0.3s ease;
+    }
+
+    #toggle-theme:hover {
+      transform: scale(1.2);
+    }
+
+    #chat-log {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .message {
+      max-width: 80%;
+      padding: 14px 18px;
+      border-radius: 18px;
+      font-size: 1rem;
+      line-height: 1.5;
+      animation: fadeIn 0.3s ease-in-out;
+      position: relative;
+      transition: background-color 0.3s;
+    }
+
+    .message:hover {
+      background-color: var(--hover-purple);
+    }
+
+    .user {
+      background-color: var(--user-msg);
+      align-self: flex-end;
+      color: #111;
+    }
+
+    .bot {
+      background-color: var(--bot-msg);
+      align-self: flex-start;
+      color: #111;
+    }
+
+    .timestamp {
+      font-size: 0.7rem;
+      opacity: 0.6;
+      margin-top: 4px;
+      text-align: right;
+    }
+
+    #input-area {
+      display: flex;
+      padding: 16px;
+      border-top: 1px solid #ccc;
+      background-color: inherit;
+    }
+
+    #user-input {
+      flex: 1;
+      padding: 14px 16px;
+      border-radius: 25px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      outline: none;
+      background-color: #fff;
+      transition: border-color 0.3s ease;
+    }
+
+    #user-input:focus {
+      border-color: var(--primary);
+    }
+
+    body.dark #user-input {
+      background-color: #3a3a3a;
+      color: #eee;
+      border: 1px solid #666;
+    }
+
+    #send-btn {
+      margin-left: 10px;
+      padding: 14px 20px;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    #send-btn:hover {
+      background-color: var(--primary-hover);
+      transform: scale(1.03);
+    }
+
+    #chat-log::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    #chat-log::-webkit-scrollbar-thumb {
+      background-color: #ccc;
+      border-radius: 4px;
+    }
+
+    #chat-log::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="chat-container">
+    <div id="header">
+      💬 Personal-Phi 
+      <button id="toggle-theme" onclick="toggleTheme()">🌙</button>
+    </div>
+    <div id="chat-log"></div>
+    <div id="input-area">
+      <input type="text" id="user-input" placeholder="Type your message..." onkeydown="if(event.key==='Enter') sendMessage()">
+      <button id="send-btn" onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+      const icon = document.getElementById('toggle-theme');
+      icon.innerText = document.body.classList.contains('dark') ? '☀️' : '🌙';
+    }
+  </script>
+</body>
+</html>
